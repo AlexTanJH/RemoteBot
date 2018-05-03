@@ -134,3 +134,4 @@ dkms.conf
 targetConfigs/
 *.ccsproject
 *.project
+Debug/
