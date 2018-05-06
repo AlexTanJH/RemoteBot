@@ -136,3 +136,4 @@ targetConfigs/
 *.project
 Debug/
 test/
+OutOfBox_MSP430FR4133/

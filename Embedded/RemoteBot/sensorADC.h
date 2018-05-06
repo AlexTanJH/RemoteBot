@@ -17,6 +17,6 @@ volatile float currentTemp;
 
 void initTimerA(void);
 
-void initTempsensor(void);
+void initTempSensor(void);
 
 #endif /* SENSORADC_H_ */
