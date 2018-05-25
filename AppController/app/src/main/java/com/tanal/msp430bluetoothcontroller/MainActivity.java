@@ -23,11 +23,11 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
 
-    final char FORWARD = 'A';
-    final char BACK = 'B';
-    final char LEFT = 'C';
-    final char RIGHT = 'D';
-    final char GETTEMP = 'E';
+    final char FORWARD = 'a';
+    final char BACK = 'b';
+    final char LEFT = 'c';
+    final char RIGHT = 'd';
+    final char GETTEMP = 'e';
 
     private final String TAG = "MainActivity";
     private BluetoothSocket socket = null;
@@ -67,11 +67,12 @@ public class MainActivity extends AppCompatActivity {
                             return true;
                         }
                         case MotionEvent.ACTION_CANCEL: {
-                            sendToMSP('X');
+
+                            sendToMSP('x');
                             return true;
                         }
                         case MotionEvent.ACTION_UP: {
-                            sendToMSP('Y');
+                            sendToMSP('y');
                             return true;
                         }
 
@@ -166,6 +167,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendToMSP(char command){
         try {
+            textView.setText("Sent: " + command);
             outputStream.write((byte) command);
         }catch (IOException e){
             Log.e(TAG, "Failed to send to MSP" );

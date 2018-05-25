@@ -21,7 +21,7 @@ int main(void)
 
     initTempSensor();           // initializing adc temperature sensor
 
-    FRCTL0 = FRCTLPW | NWAITS_0;  // for debugging
+    // FRCTL0 = FRCTLPW | NWAITS_0;  // for debugging
 
     __bis_SR_register(LPM3_bits | GIE); // put cpu to standby mode LPM wake up cpu via interrupts and enable interrupts
 
@@ -36,9 +36,11 @@ __interrupt void bluetoothISR(void)
     case 0x00:
         break;
     case 0x02:  {                               // Receive buffer full
+        UCA0IE &= ~UCRXIE; // disable reception
         unsigned char recieved = UCA0RXBUF;
 //            printf("Received char: %c\n", charData);
 //            printf("Received integer: %d\n", recieved);
+        P1OUT ^= BIT6;
         switch (recieved)
         {
         case 'a':
@@ -56,7 +58,14 @@ __interrupt void bluetoothISR(void)
         case 'd':
             sendFloatUART(currentTemp);
             break;
+        case 'x':
+            P4OUT |= BIT0;
+            break;
+        case 'y':
+            P4OUT &= ~BIT0;
+            break;
         default:
+            UCA0IE |= UCRXIE; // disable reception
             break;
         }
         //UCA0IE |= UCRXIE;
@@ -71,6 +80,7 @@ __interrupt void bluetoothISR(void)
             UCA0IE &= ~UCTXIE;              // disable transmission if reached bottom of stack
             UCA0IE |= UCRXIE;               // enable reception
             UCA0IFG &= ~(0xf);              // clear all interrupt flags
+//            P1OUT &= ~BIT6;
         }
         break;
     case 0x06:

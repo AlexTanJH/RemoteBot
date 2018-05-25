@@ -99,7 +99,7 @@ void sendFloatUART(int f){              // takes a 3 digit number and sends the 
 //        UCA0TXBUF = strStack[top-1];
 //        top--;
 //    }while (top > 0);
-    UCA0IE &= ~UCRXIE; // disable reception
+
 
     UCA0IE |= UCTXIE;       //  enable transmission and request to trasmit character
     UCA0IFG |= UCTXIFG;
@@ -117,7 +117,7 @@ void sendChar(char c){      // appends clrf to the transmit buffer
     strStack[top] = c;
     top++;
 
-    UCA0IE &= ~UCRXIE; // disable reception
+
 
     UCA0IE |= UCTXIE;       //  enable transmission and request to trasmit character
     UCA0IFG |= UCTXIFG;
