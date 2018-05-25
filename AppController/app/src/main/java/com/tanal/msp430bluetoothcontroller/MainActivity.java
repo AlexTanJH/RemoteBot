@@ -1,5 +1,6 @@
 package com.tanal.msp430bluetoothcontroller;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -30,23 +31,24 @@ public class MainActivity extends AppCompatActivity {
 
     private final String TAG = "MainActivity";
     private BluetoothSocket socket = null;
-    private ConnectThread ct;
-    private Handler handler;
+//    private ConnectThread ct;
+//    private Handler handler;
     private OutputStream outputStream;
     private Button[] button = new Button[5];
     TextView textView;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         textView = findViewById(R.id.textView);
-        handler = new Handler(Looper.getMainLooper()){
-            @Override
-            public void handleMessage(Message msg) {
-
-
-            }
-        };
+//        handler = new Handler(Looper.getMainLooper()){
+//            @Override
+//            public void handleMessage(Message msg) {
+//
+//
+//            }
+//        };
 
 
         button[0] = findViewById(R.id.forwardButton);
@@ -55,16 +57,49 @@ public class MainActivity extends AppCompatActivity {
         button[3] = findViewById(R.id.leftButton);
         button[4] = findViewById(R.id.getTemp);
 
-        for (Button b : button){
+        for (final Button b : button){
             b.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN: {
+                            // sendCommand(Integer.parseInt(b.getTag().toString()));
+                            return true;
+                        }
+                        case MotionEvent.ACTION_CANCEL: {
+                            sendToMSP('X');
+                            return true;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            sendToMSP('Y');
+                            return true;
+                        }
 
                     }
                     return false;
                 }
             });
+        }
+    }
+    private void sendCommand(int tag){
+        switch (tag){
+            case 1:
+                sendToMSP(FORWARD);
+                break;
+            case 2:
+                sendToMSP(BACK);
+                break;
+            case 3:
+                sendToMSP(RIGHT);
+                break;
+            case 4:
+                sendToMSP(LEFT);
+                break;
+            case 5:
+                sendToMSP(GETTEMP);
+                break;
+            default:
+                break;
         }
     }
 
@@ -123,29 +158,22 @@ public class MainActivity extends AppCompatActivity {
         }
 
         textView.setText("Connected");
-    }
-
-    public void sendForwardMessage(View view){
-
-    }
-    private void sendToMSP(OutputStream stream, char command){
-        try {
-            stream.write((byte) command);
-        }catch (IOException e){
-            Log.e(TAG, "Failed to send to MSP" );
+        findViewById(R.id.connectButton).setClickable(false);
+        for(Button b : button){
+            b.setClickable(true);
         }
     }
 
-    public void sendBackMessage(View view){
-
+    private void sendToMSP(char command){
+        try {
+            outputStream.write((byte) command);
+        }catch (IOException e){
+            Log.e(TAG, "Failed to send to MSP" );
+        }catch (NullPointerException e){
+            Log.e(TAG, "Stream not opened");
+        }
     }
 
-    public void sendLeftMessage(View view){
 
-    }
-
-    public void sendRightMessage(View view){
-
-    }
 
 }
