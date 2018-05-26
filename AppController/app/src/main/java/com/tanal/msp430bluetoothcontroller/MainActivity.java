@@ -28,13 +28,14 @@ public class MainActivity extends AppCompatActivity {
     final char LEFT = 'c';
     final char RIGHT = 'd';
     final char GETTEMP = 'e';
+    final char STOP = 'f';
 
     private final String TAG = "MainActivity";
     private BluetoothSocket socket = null;
 //    private ConnectThread ct;
 //    private Handler handler;
     private OutputStream outputStream;
-    private Button[] button = new Button[5];
+    private Button[] button = new Button[6];
     TextView textView;
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         button[2] = findViewById(R.id.rightButton);
         button[3] = findViewById(R.id.leftButton);
         button[4] = findViewById(R.id.getTemp);
+        button[5] = findViewById(R.id.breakButton);
 
         for (final Button b : button){
             b.setOnTouchListener(new View.OnTouchListener() {
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()){
                         case MotionEvent.ACTION_DOWN: {
-                            sendToMSP(FORWARD);
+                            sendCommand((int)b.getTag());
                             return true;
                         }
                         case MotionEvent.ACTION_CANCEL: {
@@ -97,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 5:
                 sendToMSP(GETTEMP);
+                break;
+            case 6:
+                sendToMSP(STOP);
                 break;
             default:
                 break;

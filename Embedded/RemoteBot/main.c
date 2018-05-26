@@ -44,22 +44,31 @@ __interrupt void bluetoothISR(void)
         switch (recieved)
         {
         case 'a':
-            sendChar('A');
+            sendChar('A'); // forward
             P4OUT ^= BIT0;
             break;
         case 'b':
-            sendChar('B');
+            sendChar('B');  // left
             P1OUT ^= BIT7;
             break;
         case 'c':
-            sendChar('C');
+            sendChar('C');  // right
             P2OUT ^= BIT7;
             break;
         case 'd':
+            // reverse?
+            break;
+        case 'e':
             sendFloatUART(currentTemp);
+            break;
+        case 'f':
+            clearAllGPIO(); // stop vs break???
+            UCA0IE |= UCRXIE;
             break;
         case 'x':
             clearAllGPIO(); // clear gpio and enable reception
+            UCA0IE |= UCRXIE;
+            break;
         default:
             UCA0IE |= UCRXIE; // enable reception for all other cases
             break;
