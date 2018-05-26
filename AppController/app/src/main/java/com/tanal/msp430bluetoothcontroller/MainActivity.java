@@ -63,16 +63,15 @@ public class MainActivity extends AppCompatActivity {
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()){
                         case MotionEvent.ACTION_DOWN: {
-                            // sendCommand(Integer.parseInt(b.getTag().toString()));
+                            sendToMSP(FORWARD);
                             return true;
                         }
                         case MotionEvent.ACTION_CANCEL: {
-
                             sendToMSP('x');
                             return true;
                         }
                         case MotionEvent.ACTION_UP: {
-                            sendToMSP('y');
+                            sendToMSP('x');
                             return true;
                         }
 

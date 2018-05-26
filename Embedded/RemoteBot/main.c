@@ -59,13 +59,9 @@ __interrupt void bluetoothISR(void)
             sendFloatUART(currentTemp);
             break;
         case 'x':
-            P4OUT |= BIT0;
-            break;
-        case 'y':
-            P4OUT &= ~BIT0;
-            break;
+            clearAllGPIO(); // clear gpio and enable reception
         default:
-            UCA0IE |= UCRXIE; // disable reception
+            UCA0IE |= UCRXIE; // enable reception for all other cases
             break;
         }
         //UCA0IE |= UCRXIE;

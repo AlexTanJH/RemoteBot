@@ -10,5 +10,6 @@
 #define GPIO_H_
 
 void initGPIO(void);
+void clearAllGPIO(void);
 
 #endif /* GPIO_H_ */
